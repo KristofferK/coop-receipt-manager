@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoopReceiptManager.WebClients;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace CoopReceiptManager
 {
     public class CoopReceiptManager
     {
-
+        public void SignIn(CoopCredentials credentials)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

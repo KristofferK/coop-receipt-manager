@@ -48,5 +48,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoopReceiptManager\CoopReceiptManager.csproj">
+      <Project>{73165e6f-03f8-4d6a-b9b6-48153e54773d}</Project>
+      <Name>CoopReceiptManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
