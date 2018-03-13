@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace CoopReceiptManager
 {
-    public class CoopReceiptManager
+    public class CoopManager
     {
+        private CoopWebClient webClient = new CoopWebClient();
+
         public void SignIn(CoopCredentials credentials)
         {
-            throw new NotImplementedException();
+            webClient.SignIn(credentials);
         }
     }
 }

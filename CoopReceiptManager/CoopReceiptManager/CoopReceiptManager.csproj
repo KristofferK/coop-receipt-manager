@@ -40,11 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoopReceiptManager.cs" />
+    <Compile Include="CoopManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebClients\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CoopCredentials.cs" />
     <Compile Include="WebClients\CoopWebClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
