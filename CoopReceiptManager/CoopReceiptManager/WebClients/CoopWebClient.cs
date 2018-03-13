@@ -10,9 +10,8 @@ namespace CoopReceiptManager.WebClients
     {
         private CookieAwareWebClient webClient = new CookieAwareWebClient();
 
-        public void Login(CoopCredentials)
+        public void Login(CoopCredentials credentials)
         {
-
         }
     }
 }
