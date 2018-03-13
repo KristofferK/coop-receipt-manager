@@ -15,5 +15,15 @@ namespace CoopReceiptManager
         {
             webClient.SignIn(credentials);
         }
+
+        public void GetReceipts()
+        {
+            webClient.GetReceipts();
+        }
+
+        public void GetReceipt(string receiptId)
+        {
+            webClient.GetReceipt(receiptId);
+        }
     }
 }

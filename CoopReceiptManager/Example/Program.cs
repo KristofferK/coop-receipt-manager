@@ -13,6 +13,9 @@ namespace Example
         {
             var coopReceiptManager = new CoopManager();
             coopReceiptManager.SignIn(CredentialManager.GetCredentails());
+            coopReceiptManager.GetReceipts();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            coopReceiptManager.GetReceipt("180313020300040745");
 
         }
     }
