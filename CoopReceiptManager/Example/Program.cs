@@ -21,10 +21,6 @@ namespace Example
 
             coopReceiptManager.SignIn(CredentialManager.GetCredentails());
 
-            //coopReceiptManager.GetReceipts();
-            //Console.ForegroundColor = ConsoleColor.Cyan;
-            //coopReceiptManager.GetReceipt("180313020300040745");
-
         }
 
         private static void SignInHandler(object sender, SignInEventArgs e)
@@ -53,7 +49,10 @@ namespace Example
                 Print(receipt.ToString(), ConsoleColor.Cyan);
             }
 
-            Print("Total amount: " + e.Receipts.Sum(receipt => receipt.Amount) + "\n", ConsoleColor.Cyan);
+            Print("Total amount: " + coopReceiptManager.GetTotalAmount(), ConsoleColor.Cyan);
+            Print("Total amount last 7 days: " + coopReceiptManager.GetTotalAmount(7), ConsoleColor.Cyan);
+            Print("Total amount last 14 days: " + coopReceiptManager.GetTotalAmount(14), ConsoleColor.Cyan);
+            Print("Total amount last 30 days: " + coopReceiptManager.GetTotalAmount(30) + "\n", ConsoleColor.Cyan);
             Print("Loading data for " + e.Receipts.First().Id, ConsoleColor.Green);
             coopReceiptManager.GetReceiptDetails(e.Receipts.First().Id);
         }

@@ -12,6 +12,7 @@ namespace CoopReceiptManager
     public class CoopManager
     {
         private CoopWebClient webClient = new CoopWebClient();
+        private IEnumerable<Receipt> receiptscache;
 
         public delegate void SignInHandler(object sender, SignInEventArgs e);
         public event SignInHandler OnSignIn;
@@ -37,8 +38,20 @@ namespace CoopReceiptManager
             {
                 var receipts = webClient.GetReceipts();
                 var success = receipts != null;
+
+                receiptscache = receipts;
                 OnReceiptsReceived?.Invoke(this, new ReceiptsReceivedEventArgs(receipts, success));
             }).Start();
+        }
+
+        public decimal GetTotalAmount()
+        {
+            return receiptscache.Sum(e => e.Amount);
+        }
+
+        public decimal GetTotalAmount(int days)
+        {
+            return receiptscache.Where(e => e.Date > DateTime.Now.AddDays(days * -1)).Sum(e => e.Amount);
         }
 
         public void GetReceiptDetails(string receiptId)
