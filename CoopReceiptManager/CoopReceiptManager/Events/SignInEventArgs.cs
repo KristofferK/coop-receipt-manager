@@ -9,7 +9,7 @@ namespace CoopReceiptManager.Events
     public class SignInEventArgs : EventArgs
     {
         public bool SuccessfullySignedIn { get; private set; }
-        public string Email { get; set; }
+        public string Email { get; private set; }
 
         public SignInEventArgs(string email, bool success)
         {

@@ -17,6 +17,7 @@ namespace Example
         {
             coopReceiptManager.OnSignIn += SignInHandler;
             coopReceiptManager.OnReceiptsReceived += ReceiptsReceivedHandler;
+            coopReceiptManager.OnReceiptDetailsReceived += ReceiptDetailsReceivedHandler;
 
             coopReceiptManager.SignIn(CredentialManager.GetCredentails());
 
@@ -34,7 +35,7 @@ namespace Example
                 return;
             }
 
-            Print("Successfully signed into " + e.Email, ConsoleColor.Green);
+            Print("Successfully signed into " + e.Email + "\n", ConsoleColor.Green);
             coopReceiptManager.GetReceipts();
         }
 
@@ -51,6 +52,22 @@ namespace Example
             {
                 Print(receipt.ToString(), ConsoleColor.Cyan);
             }
+
+            Print("Total amount: " + e.Receipts.Sum(receipt => receipt.Amount) + "\n", ConsoleColor.Cyan);
+            Print("Loading data for " + e.Receipts.First().Id, ConsoleColor.Green);
+            coopReceiptManager.GetReceiptDetails(e.Receipts.First().Id);
+        }
+
+        private static void ReceiptDetailsReceivedHandler(object sender, ReceiptDetailsReceivedEventArgs e)
+        {
+            if (!e.SuccessfullyFetchedReceipt)
+            {
+                Print("Failed to load receipt " + e.ReceiptId, ConsoleColor.Red);
+                return;
+            }
+
+            Print("Successfully loaded details for receipt " + e.ReceiptId, ConsoleColor.Green);
+            Print(e.ReceiptDetails.ToString(), ConsoleColor.Cyan);
         }
     }
 }

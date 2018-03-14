@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CoopReceiptManager.WebClients
@@ -23,7 +24,7 @@ namespace CoopReceiptManager.WebClients
             var email = WebUtility.UrlEncode(credentials.Email);
             var password = WebUtility.UrlEncode(credentials.Password);
             var payload = $"EmailOrMemberNumber={email}&Password={password}&FacebookSignedRequest=&HashTag=&RedirectUrl=https%3A%2F%2Fcoop.dk%2F&OpenInNewWindow=False&ActiveType=EmailMemberNumber";
-            
+
             webClient.Headers["Content-Type"] = "application/x-www-form-urlencoded";
             webClient.Headers["Referer"] = "https://coop.dk/login";
             webClient.Headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
@@ -74,20 +75,40 @@ namespace CoopReceiptManager.WebClients
             }
         }
 
-        public void GetReceipt(string receiptId)
+        public ReceiptDetails GetReceiptDetails(string receiptId)
         {
-            webClient.Headers["Referer"] = "https://medlem.coop.dk/medlemskonto+og+kvitteringer/Kvitteringer";
-            webClient.Headers["Accept"] = "text/html, */*; q=0.01";
-            webClient.Headers["X-Requested-With"] = "XMLHttpRequest";
-            webClient.Headers["X-fancyBox"] = "true";
+            string source;
+            try
+            {
+                webClient.Headers["Referer"] = "https://medlem.coop.dk/medlemskonto+og+kvitteringer/Kvitteringer";
+                webClient.Headers["Accept"] = "text/html, */*; q=0.01";
+                webClient.Headers["X-Requested-With"] = "XMLHttpRequest";
+                webClient.Headers["X-fancyBox"] = "true";
 
-            var source = webClient.DownloadString("https://medlem.coop.dk/MemberAccount/GetReceiptDetails?receiptId=" + receiptId);
-            webClient.Headers.Remove("Referer");
-            webClient.Headers.Remove("Accept");
-            webClient.Headers.Remove("X-Requested-With");
-            webClient.Headers.Remove("X-fancyBox");
+                source = webClient.DownloadString("https://medlem.coop.dk/MemberAccount/GetReceiptDetails?receiptId=" + receiptId);
+                int sourceStart = source.IndexOf("pre-wrap;\">") + "pre-wrap;\">".Length;
+                source = source.Substring(sourceStart);
 
-            Console.WriteLine("Receipt: " + source);
+                int sourceEnd = source.IndexOf("</table>");
+                source = source.Substring(0, sourceEnd);
+
+                source = Regex.Replace(source, "</?[^>]*>", "");
+                source = WebUtility.HtmlDecode(source);
+                source = Regex.Replace(source, "\n{3}", "\n\n");
+
+                return new ReceiptDetails() { Content = source };
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                webClient.Headers.Remove("Referer");
+                webClient.Headers.Remove("Accept");
+                webClient.Headers.Remove("X-Requested-With");
+                webClient.Headers.Remove("X-fancyBox");
+            }
         }
     }
 }

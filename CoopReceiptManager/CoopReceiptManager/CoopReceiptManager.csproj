@@ -44,10 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CoopManager.cs" />
+    <Compile Include="Events\ReceiptDetailsReceivedEventArgs.cs" />
     <Compile Include="Events\ReceiptsReceivedEventArgs.cs" />
     <Compile Include="Events\SignInEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receipt.cs" />
+    <Compile Include="ReceiptDetails.cs" />
     <Compile Include="WebClients\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

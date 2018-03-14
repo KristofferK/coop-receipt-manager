@@ -9,7 +9,7 @@ namespace CoopReceiptManager.Events
     public class ReceiptsReceivedEventArgs : EventArgs
     {
         public bool SuccessfullyFetchedReceipts { get; private set; }
-        public IEnumerable<Receipt> Receipts { get; set; }
+        public IEnumerable<Receipt> Receipts { get; private set; }
 
         public ReceiptsReceivedEventArgs(IEnumerable<Receipt> receipts, bool success)
         {
