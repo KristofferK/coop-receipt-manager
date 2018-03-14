@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -40,7 +41,7 @@ namespace CoopReceiptManager.WebClients
             return true;
         }
 
-        public void GetReceipts()
+        public IEnumerable<Receipt> GetReceipts()
         {
             webClient.Headers["Referer"] = "https://medlem.coop.dk/medlemskonto+og+kvitteringer/Kvitteringer";
             webClient.Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
@@ -51,7 +52,15 @@ namespace CoopReceiptManager.WebClients
             webClient.Headers.Remove("Accept");
             webClient.Headers.Remove("X-Requested-With");
 
-            Console.WriteLine("Receipts: " + source);
+            var receipts = JObject.Parse(source)["Collection"];
+            return receipts.Select(e => new Receipt()
+            {
+                Id = e["Id"].ToString(),
+                Amount = (decimal)e["Amount"],
+                BonusEarned = (decimal?)e["BonusLoadedAmount"],
+                Store = e["StoreName"].ToString(),
+                Date = (DateTime)e["PurchaseDate"]
+            });
         }
 
         public void GetReceipt(string receiptId)

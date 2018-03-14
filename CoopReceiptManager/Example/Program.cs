@@ -5,15 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using CoopReceiptManager;
 using CoopReceiptManager.Events;
+using static Example.ColorfulPrinter;
 
 namespace Example
 {
     class Program
     {
+        private static CoopManager coopReceiptManager = new CoopManager();
+
         static void Main(string[] args)
         {
-            var coopReceiptManager = new CoopManager();
             coopReceiptManager.OnSignIn += SignInHandler;
+            coopReceiptManager.OnReceiptsReceived += ReceiptsReceivedHandler;
+
             coopReceiptManager.SignIn(CredentialManager.GetCredentails());
 
             //coopReceiptManager.GetReceipts();
@@ -31,6 +35,22 @@ namespace Example
             }
 
             Print("Successfully signed into " + e.Email, ConsoleColor.Green);
+            coopReceiptManager.GetReceipts();
+        }
+
+        private static void ReceiptsReceivedHandler(object sender, ReceiptsReceivedEventArgs e)
+        {
+            if (!e.SuccessfullyFetchedReceipts)
+            {
+                Print("Failed to load receipts", ConsoleColor.Red);
+                return;
+            }
+
+            Print("Successfully loaded receipts", ConsoleColor.Green);
+            foreach (var receipt in e.Receipts)
+            {
+                Print(receipt.ToString(), ConsoleColor.Cyan);
+            }
         }
     }
 }

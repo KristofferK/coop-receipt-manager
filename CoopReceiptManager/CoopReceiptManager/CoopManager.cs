@@ -16,6 +16,9 @@ namespace CoopReceiptManager
         public delegate void SignInHandler(object sender, SignInEventArgs e);
         public event SignInHandler OnSignIn;
 
+        public delegate void ReceiptsReceivedHandler(object sender, ReceiptsReceivedEventArgs e);
+        public event ReceiptsReceivedHandler OnReceiptsReceived;
+
         public void SignIn(CoopCredentials credentials)
         {
             new Thread(() =>
@@ -27,7 +30,11 @@ namespace CoopReceiptManager
 
         public void GetReceipts()
         {
-            webClient.GetReceipts();
+            new Thread(() =>
+            {
+                var receipts = webClient.GetReceipts();
+                OnReceiptsReceived?.Invoke(this, new ReceiptsReceivedEventArgs(receipts, true));
+            }).Start();
         }
 
         public void GetReceipt(string receiptId)
