@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CoopManager.cs" />
+    <Compile Include="Events\SignInEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebClients\CookieAwareWebClient.cs">
       <SubType>Component</SubType>

@@ -17,7 +17,7 @@ namespace CoopReceiptManager.WebClients
             webClient.Encoding = Encoding.UTF8;
         }
 
-        public void SignIn(CoopCredentials credentials)
+        public bool SignIn(CoopCredentials credentials)
         {
             var email = WebUtility.UrlEncode(credentials.Email);
             var password = WebUtility.UrlEncode(credentials.Password);
@@ -34,8 +34,10 @@ namespace CoopReceiptManager.WebClients
 
             if (source.Contains("<h1>Log ind</h1>"))
             {
-                throw new ArgumentException("Invalid credentials provided");
+                return false;
             }
+
+            return true;
         }
 
         public void GetReceipts()
