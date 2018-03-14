@@ -43,24 +43,35 @@ namespace CoopReceiptManager.WebClients
 
         public IEnumerable<Receipt> GetReceipts()
         {
-            webClient.Headers["Referer"] = "https://medlem.coop.dk/medlemskonto+og+kvitteringer/Kvitteringer";
-            webClient.Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
-            webClient.Headers["X-Requested-With"] = "XMLHttpRequest";
-
-            var source = webClient.DownloadString("https://medlem.coop.dk/MemberAccount/GetReceipts?pageIndex=1&pageSize=25&fraDato=01-01-2010&tilDato=31-12-2100");
-            webClient.Headers.Remove("Referer");
-            webClient.Headers.Remove("Accept");
-            webClient.Headers.Remove("X-Requested-With");
-
-            var receipts = JObject.Parse(source)["Collection"];
-            return receipts.Select(e => new Receipt()
+            string source;
+            try
             {
-                Id = e["Id"].ToString(),
-                Amount = (decimal)e["Amount"],
-                BonusEarned = (decimal?)e["BonusLoadedAmount"],
-                Store = e["StoreName"].ToString(),
-                Date = (DateTime)e["PurchaseDate"]
-            });
+                webClient.Headers["Referer"] = "https://medlem.coop.dk/medlemskonto+og+kvitteringer/Kvitteringer";
+                webClient.Headers["Accept"] = "application/json, text/javascript, */*; q=0.01";
+                webClient.Headers["X-Requested-With"] = "XMLHttpRequest";
+
+                source = webClient.DownloadString("https://medlem.coop.dk/MemberAccount/GetReceipts?pageIndex=1&pageSize=25&fraDato=01-01-2010&tilDato=31-12-2100");
+
+                var receipts = JObject.Parse(source)["Collection"];
+                return receipts.Select(e => new Receipt()
+                {
+                    Id = e["Id"].ToString(),
+                    Amount = (decimal)e["Amount"],
+                    BonusEarned = (decimal?)e["BonusLoadedAmount"],
+                    Store = e["StoreName"].ToString(),
+                    Date = (DateTime)e["PurchaseDate"]
+                });
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                webClient.Headers.Remove("Referer");
+                webClient.Headers.Remove("Accept");
+                webClient.Headers.Remove("X-Requested-With");
+            }
         }
 
         public void GetReceipt(string receiptId)

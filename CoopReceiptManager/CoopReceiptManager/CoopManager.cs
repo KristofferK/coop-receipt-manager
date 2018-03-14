@@ -33,7 +33,8 @@ namespace CoopReceiptManager
             new Thread(() =>
             {
                 var receipts = webClient.GetReceipts();
-                OnReceiptsReceived?.Invoke(this, new ReceiptsReceivedEventArgs(receipts, true));
+                var success = receipts != null;
+                OnReceiptsReceived?.Invoke(this, new ReceiptsReceivedEventArgs(receipts, success));
             }).Start();
         }
 
