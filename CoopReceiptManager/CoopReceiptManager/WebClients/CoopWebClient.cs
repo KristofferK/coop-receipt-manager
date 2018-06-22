@@ -94,7 +94,9 @@ namespace CoopReceiptManager.WebClients
 
                 source = Regex.Replace(source, "</?[^>]*>", "");
                 source = WebUtility.HtmlDecode(source);
-                source = Regex.Replace(source, "\n{3}", "\n\n");
+                source = source.Replace("\r", "");
+                source = Regex.Replace(source, "\n\\s+\n", "\n\n");
+                source = Regex.Replace(source, "\n{2,}", "\n");
 
                 return new ReceiptDetails() { Content = source };
             }
