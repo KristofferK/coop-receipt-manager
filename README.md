@@ -8,4 +8,4 @@ This behavior can easily be changed in `Example/program.cs`.
 Remember to update `Example/CredentialManager.cs` to include your Coop.dk credentials.
 
 # Example output
-![Example output](https://i.gyazo.com/7de904472115ebd71de9b02ef798acf2.png "Example output")
+![Example output](http://github-images.fobr.dk/coop-receipt-manager-console.png "Example output")
